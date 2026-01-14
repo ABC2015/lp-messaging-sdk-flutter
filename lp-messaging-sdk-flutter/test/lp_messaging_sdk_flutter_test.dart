@@ -1,39 +1,47 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lp_messaging_sdk_flutter/lp_messaging_sdk_flutter.dart';
+import 'package:lp_messaging_sdk_flutter/src/models.dart';
 
 void main() {
-  test('LpConfig toJson/fromJson roundtrip', () {
-    // This verifies our channel payload shape stays stable over time.
-    const cfg = LpConfig(
-      account: 'acct',
-      enableLogging: true,
-      extras: {'k': 'v'},
+  test('LpNativeInitConfig toMap includes required fields', () {
+    const cfg = LpNativeInitConfig(
+      accountId: 'acct',
+      appId: 'com.example.app',
+      jwt: 'token',
+      monitoringEnabled: true,
     );
 
-    final json = cfg.toJson();
-
-    // fromJson expects Map<Object?, Object?> since platform channels often use that type.
-    final back = LpConfig.fromJson(json.map((k, v) => MapEntry(k, v)));
-
-    expect(back.account, 'acct');
-    expect(back.enableLogging, true);
-    expect(back.extras['k'], 'v');
+    final map = cfg.toMap();
+    expect(map['accountId'], 'acct');
+    expect(map['appId'], 'com.example.app');
+    expect(map['jwt'], 'token');
+    expect(map['monitoringEnabled'], true);
   });
 
-  test('LpConversationParams toJson/fromJson roundtrip', () {
-    const params = LpConversationParams(
-      campaignInfo: 'cmp',
-      visitorId: 'visitor',
-      customVariables: {'a': 'b'},
+  test('LpAuthConfig toMap includes optional fields', () {
+    const auth = LpAuthConfig(
+      jwt: 'jwt',
+      authCode: 'code',
+      performStepUp: true,
     );
 
-    final json = params.toJson();
-    final back = LpConversationParams.fromJson(
-      json.map((k, v) => MapEntry(k, v)),
+    final map = auth.toMap();
+    expect(map['jwt'], 'jwt');
+    expect(map['authCode'], 'code');
+    expect(map['performStepUp'], true);
+  });
+
+  test('LpUserProfile toMap includes provided fields', () {
+    const profile = LpUserProfile(
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      phoneNumber: '123',
+      email: 'ada@example.com',
     );
 
-    expect(back.campaignInfo, 'cmp');
-    expect(back.visitorId, 'visitor');
-    expect(back.customVariables['a'], 'b');
+    final map = profile.toMap();
+    expect(map['firstName'], 'Ada');
+    expect(map['lastName'], 'Lovelace');
+    expect(map['phoneNumber'], '123');
+    expect(map['email'], 'ada@example.com');
   });
 }

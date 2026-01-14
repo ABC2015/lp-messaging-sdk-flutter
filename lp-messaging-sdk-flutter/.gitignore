@@ -1,33 +1,135 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
+##########################################
+# Common OS Files
+##########################################
+# macOS
 .DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+.AppleDouble
+.LSOverride
 
-# IntelliJ related
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+
+##########################################
+# Common IDE / Editor Files
+##########################################
+# IntelliJ / Android Studio
 *.iml
-*.ipr
-*.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# VSCode
+.vscode/
 
-# Flutter/Dart/Pub related
-# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
-/pubspec.lock
-**/doc/api/
-.dart_tool/
-.flutter-plugins-dependencies
+# Eclipse
+.project
+.classpath
+.settings/
+
+# JetBrains Fleet
+.fleet
+
+
+##########################################
+# Flutter / Dart
+##########################################
+# Flutter/Dart build and tool files
 /build/
-/coverage/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+pubspec.lock
+
+# Generated plugin registrant
+GeneratedPluginRegistrant.*
+
+
+##########################################
+# Android (Android Compose)
+##########################################
+# Gradle files
+.gradle/
+**/build/
+!**/src/**/build/
+local.properties
+*.apk
+*.ap_
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+
+##########################################
+# Node.js / JavaScript / TypeScript (React, Svelte, Vue)
+##########################################
+# Node modules, build and cache directories
+node_modules/
+.pnp/
+.pnp.js
+build/
+dist/
+coverage/
+
+# Logs created by Node tooling
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+
+##########################################
+# Svelte-specific
+##########################################
+.svelte-kit/
+
+
+##########################################
+# Vue-specific
+##########################################
+# Vue CLI build output (also uses dist/)
+# (covered by generic `dist/` above)
+
+
+##########################################
+# Nuxt.js build & cache
+##########################################
+# Dev build output
+.nuxt/
+
+# Production output (Nitro + static)
+.output/
+.nitro/
+dist/
+
+# Local cache / prerendered data
+.cache/
+.data/
+
+
+##########################################
+# Other Common Files and Directories
+##########################################
+# Logs
+logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Cypress Screenshots, Videos, and Reports
+cypress/screenshots
+
+
+##########################################
+# Local env files
+##########################################
+.env
+.env.*
+!.env.example

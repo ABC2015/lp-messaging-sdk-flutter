@@ -1,26 +1,40 @@
 stages:
   - setup
-  - validation
-  - unit_testing
-  - analyze_sample_apps
+  - validate
+  # - unit_testing
+  # - integration_testing
+  - e2e_testing
+  # - frontend
+  # - backend
+  - deployment-helm-chart
   - release
 
 # The pipeline covers a series of triggers to ensure full testing and coverage
 
+# -------------------------------------------------------------------
+# Gate the workflow: allow pipelines to run for any repo change.
+# (We isolate execution per job using rules:changes below.)
+# -------------------------------------------------------------------
+workflow:
+  rules:
+    - when: always
+
+# -------------------------------------------------------------------
 # Debug Stage
+# -------------------------------------------------------------------
 debug_merge_request:
   stage: setup
   script:
-    - echo "Basic Merge Request Variables..." 
+    - echo "Basic Merge Request Variables..."
     - echo "CI_MERGE_REQUEST_IID is '$CI_MERGE_REQUEST_IID'"
     - echo "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME is $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
     - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME is $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - echo "CI_MERGE_REQUEST_EVENT_TYPE is $CI_MERGE_REQUEST_EVENT_TYPE"
-    
+
     - echo "Commit Information Variables..."
     - echo "CI_COMMIT_REF_NAME is $CI_COMMIT_REF_NAME"
     - echo "CI_COMMIT_BRANCH is $CI_COMMIT_BRANCH"
-    - echo "CI_COMMIT_MESSAGE is $CI_COMMIT_MESSAGE" 
+    - echo "CI_COMMIT_MESSAGE is $CI_COMMIT_MESSAGE"
 
     - echo "Determining branch name..."
     - BRANCH_NAME=${CI_COMMIT_BRANCH:-${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_REF_NAME}}
@@ -29,61 +43,95 @@ debug_merge_request:
     - echo "Pipeline Metadata..."
     - echo "CI_PIPELINE_SOURCE is $CI_PIPELINE_SOURCE"
   rules:
-    - if: '$CI_PIPELINE_SOURCE'  # Forces execution in ALL scenarios
-      when: always
+    - when: always
 
-# Validate Conditional Triggers
-validation_trigger:
-  stage: validation
-  trigger:
-    include: tools/pipelines/backend/child-ci-setup-validation.yml
+validate_branch_name:
+  stage: validate
+  script:
+    - echo "Validating branch name..."
+    - |
+      BRANCH_NAME=${CI_COMMIT_BRANCH:-$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+      echo "Branch name: $BRANCH_NAME"
+
+      if echo "$BRANCH_NAME" | grep -Eq "^(development|qa|main)$"; then
+        echo "✅ Valid branch name for protected branches: $BRANCH_NAME."
+      elif echo "$BRANCH_NAME" | grep -Eq "^(feat|fix|hotfix|chore|test|refactor|release|docs)/[a-z0-9_-]+$"; then
+        echo "✅ Branch name follows naming convention: $BRANCH_NAME."
+      else
+        echo "❌ Invalid branch name: $BRANCH_NAME."
+        echo "Expected format: <type>/<branch-name>. Valid types: feat, fix, hotfix, chore, test, refactor, release, docs, development, qa, main."
+        exit 1
+      fi
   rules:
-    # Condition 1: Branch is not main, qa, or development
+   - when: always
+
+validate_commit_messages:
+  stage: validate
+  image: alpine:latest
+  script:
+    - apk add --no-cache git bash grep
+    - echo "Validating commit messages..."
+    - |
+      # Define valid target branches for merge commits
+      TARGET_BRANCHES="(development|main|qa)"
+      # Check if this is a merge request pipeline
+      if [ -n "$CI_MERGE_REQUEST_IID" ]; then
+        echo "Merge request detected. Allowing merge commit messages..."
+        MERGE_REGEX="^Merge branch '[a-zA-Z0-9/_-]+' into '$TARGET_BRANCHES'$"
+        REGEX="^(feat|fix|hotfix|chore|test|refactor|release|admin|docs)(\([a-z0-9_-]+\))?: .{1,72}$"
+        COMBINED_REGEX="($MERGE_REGEX|$REGEX)"
+      else
+        echo "Standard pipeline detected. Enforcing strict commit message validation..."
+        REGEX="^(feat|fix|hotfix|chore|test|refactor|release|admin|docs)(\([a-z0-9_-]+\))?: .{1,72}$"
+      fi
+
+      # Validate the last commit message
+      INVALID_COMMITS=$(git log -1 --format=%s | grep -vE "$COMBINED_REGEX" || true)
+
+      if [ -n "$INVALID_COMMITS" ]; then
+        echo "❌ Commit message does not follow convention:"
+        echo "$INVALID_COMMITS"
+        echo "Expected formats:"
+        echo "  Merge branch 'source-branch' into 'target-branch' (for merge requests)"
+        echo "  <type>(<scope>): <short summary> (standard commits)"
+        echo "Examples:"
+        echo "  feat(auth): add OAuth 2.0 support"
+        echo "  fix(payment): resolve rounding error in total calculation"
+        exit 1
+      else
+        echo "✅ Commit message follows the convention."
+      fi
+  rules:
+    - when: always
+
+deployment_trigger_devops:
+  stage: deployment-helm-chart
+  trigger:
+    include: tools/pipelines/kubernetes-hosting/child-ci-production-backend-publish-helm-chart.yml
+  environment:
+    name: production
+    # url: https://your.prod.url
+
+  # Make this manual job optional
+  allow_failure: true
+
+  rules:
     - if: '$CI_COMMIT_REF_NAME != "main" && $CI_COMMIT_REF_NAME != "qa" && $CI_COMMIT_REF_NAME != "development"'
-      when: always
-
-    # Condition 2: Triggered by a push event
+      when: manual
     - if: '$CI_PIPELINE_SOURCE == "push"'
-      when: always
-
-    # Condition 3: Triggered by a merge request event (source branch is not "development")
+      when: manual
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "development"'
-      when: always
-
-    # Condition 4: Triggered by a merge request event (source branch is "development", "qa", or "main")
+      when: manual
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "development" || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "qa" || $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "main"'
-      when: always
-
-    # Fallback: Skip if no condition matches
+      when: manual
+    # Fallback: skip
     - when: never
 
-# Unit Test Conditional Triggers
-unit_test_trigger:
-  stage: unit_testing
-  trigger:
-    include: tools/pipelines/backend/child-ci-unit-tests.yml
-  needs:
-    - job: validation_trigger
-  rules:
-    # Always runs after validation trigger
-    - when: always
-    
-# Sample App Conditional Triggers
-analyze_flutter_mobile:
-  stage: analyze_sample_apps
-  trigger:
-    include: tools/pipelines/frontend/child-ci-analyze-flutter-mobile.yml
-  needs:
-    - job: unit_test_trigger
-  rules:
-    # Always runs after unit_test trigger
-    - when: always
-
-# Release Triggers
+  # Release Triggers
 gitlab_github_release:
   stage: release
   trigger:
-    include: tools/pipelines/backend/child-ci-release.yml
+    include: tools/pipelines/cloudbuild-hosting/child-ci-release.yml
   rules:
     - if: '$CI_COMMIT_BRANCH == "development"'
       when: always

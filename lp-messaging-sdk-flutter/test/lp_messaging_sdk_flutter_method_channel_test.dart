@@ -1,22 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lp_messaging_sdk_flutter/lp_messaging_sdk_flutter_method_channel.dart';
-import 'package:lp_messaging_sdk_flutter/src/core/lp_config.dart';
-import 'package:lp_messaging_sdk_flutter/src/core/lp_conversation_params.dart';
+import 'package:lp_messaging_sdk_flutter/src/method_channel_impl.dart';
+import 'package:lp_messaging_sdk_flutter/src/models.dart';
 
 void main() {
-  // Ensures Flutter binding is available for MethodChannel mocking.
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const channel = MethodChannel('lp_messaging_sdk_flutter/methods');
-
+  const channel = MethodChannel('lp_messaging_sdk_flutter');
   final log = <MethodCall>[];
 
   setUp(() {
-    // Intercepts calls from our MethodChannel implementation so we can assert correctness.
     channel.setMockMethodCallHandler((call) async {
       log.add(call);
-      return null; // We return null for void methods
+      return null;
     });
     log.clear();
   });
@@ -26,27 +22,67 @@ void main() {
   });
 
   test('initialize calls native method with payload', () async {
-    final platform = MethodChannelLpMessagingSdkFlutter();
-    await platform.initialize(const LpConfig(account: 'acct'));
+    final platform = MethodChannelLpMessaging();
+    await platform.initialize(
+      const LpNativeInitConfig(
+        accountId: 'acct',
+        appId: 'com.example.app',
+        jwt: 'token',
+      ),
+    );
 
     expect(log, hasLength(1));
     expect(log.single.method, 'initialize');
 
-    // Optional: validate payload includes required keys
     final args = log.single.arguments as Map?;
-    expect(args?['account'], 'acct');
+    expect(args?['accountId'], 'acct');
+    expect(args?['appId'], 'com.example.app');
+    expect(args?['jwt'], 'token');
   });
 
   test('showConversation calls native method', () async {
-    final platform = MethodChannelLpMessagingSdkFlutter();
+    final platform = MethodChannelLpMessaging();
     await platform.showConversation(
-      const LpConversationParams(campaignInfo: 'cmp'),
+      auth: const LpAuthConfig(jwt: 'jwt', performStepUp: true),
     );
 
     expect(log, hasLength(1));
     expect(log.single.method, 'showConversation');
 
     final args = log.single.arguments as Map?;
-    expect(args?['campaignInfo'], 'cmp');
+    final auth = args?['auth'] as Map?;
+    expect(auth?['jwt'], 'jwt');
+    expect(auth?['performStepUp'], true);
+  });
+
+  test('registerPushToken calls native method', () async {
+    final platform = MethodChannelLpMessaging();
+    await platform.registerPushToken(
+      const LpPushConfig(
+        token: 'token',
+        auth: LpAuthConfig(jwt: 'jwt'),
+      ),
+    );
+
+    expect(log, hasLength(1));
+    expect(log.single.method, 'registerPushToken');
+    final args = log.single.arguments as Map?;
+    expect(args?['token'], 'token');
+    final auth = args?['auth'] as Map?;
+    expect(auth?['jwt'], 'jwt');
+  });
+
+  test('getUnreadCount calls native method', () async {
+    channel.setMockMethodCallHandler((call) async {
+      log.add(call);
+      if (call.method == 'getUnreadCount') return 3;
+      return null;
+    });
+
+    final platform = MethodChannelLpMessaging();
+    final count = await platform.getUnreadCount();
+
+    expect(count, 3);
+    expect(log.single.method, 'getUnreadCount');
   });
 }
