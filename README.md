@@ -1,6 +1,5 @@
 # LivePerson Flutter and Dart Messaging SDKs
 
-<<<<<<< HEAD
 ![Flutter Plugin: Experimental](https://img.shields.io/badge/Flutter%20Plugin-Experimental-orange?style=flat-square)
 
 This repository contains two LivePerson SDKs that serve different needs:
