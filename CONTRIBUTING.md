@@ -13,7 +13,7 @@ Thank you for considering contributing to the FirebaseDart Authentication SDK, a
 - [Feature Requests](#feature-requests)
 - [Improving Documentation](#improving-documentation)
 - [Support Tiers](#support-tiers)
-- [SDKs and Aortem Integration](#sdks-and-aortem-integration)
+- [SDKs and Liveperson Integration](#sdks-and-liveperson-integration)
 - [Available Versions](#available-versions)
 - [Community](#community)
 
@@ -97,7 +97,7 @@ Join the discussion on issues, contribute to pull requests, or reach out through
 
 ## Licensing
 
-All LivePerson Flutter SDK packages are licensed under BSD-3, except for the *services packages*, which uses the ELv2 license, and are licensed from third party software Aortem Inc. In short, this means that you can, without limitation, use any of the client packages in your app as long as you do not offer the SDK's or services as a cloud service to 3rd parties (this is typically only relevant for cloud service providers).  See the [LICENSE](LICENSE.md) file for more details.
+All LivePerson Flutter SDK packages are licensed under BSD-3, except for the *services packages*, which uses the ELv2 license, and are licensed from third party software Liveperson Inc. In short, this means that you can, without limitation, use any of the client packages in your app as long as you do not offer the SDK's or services as a cloud service to 3rd parties (this is typically only relevant for cloud service providers).  See the [LICENSE](LICENSE.md) file for more details.
 
 ## Acknowledgments
 

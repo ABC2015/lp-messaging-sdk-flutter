@@ -1,0 +1,17 @@
+name: lp_messaging_sdk_dart
+description: Pure Dart engine for LivePerson messaging (consumer/agent).
+version: 0.0.1
+publish_to: "none"
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  http: ^1.6.0
+  web_socket_channel: ^3.0.3
+  meta: ^1.17.0
+  hive: ^2.2.3
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^3.0.0
