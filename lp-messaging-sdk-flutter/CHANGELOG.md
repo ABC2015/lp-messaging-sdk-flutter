@@ -1,3 +1,9 @@
+## 0.0.1-experimental.3
+
+### Changed
+
+* Example app: allow initializing with valid account/app IDs without auth.
+
 ## 0.0.1-experimental.2
 
 ### Changed
