@@ -135,3 +135,4 @@ gitlab_github_release:
   rules:
     - if: '$CI_COMMIT_BRANCH == "development"'
       when: always
+
