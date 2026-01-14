@@ -1,9 +1,15 @@
-# Contributing to LivePerson Flutter SDK
+# Contributing
 
-Thank you for considering contributing to the FirebaseDart Authentication SDK, a Dart implementation for Firebase Authentication services designed to work out of the box for any application that wants to use Firebase and dart together.
+Thanks for your interest in improving the LivePerson Flutter and Dart Messaging SDKs.
+This repo includes two SDKs with different scopes; please target changes to the
+appropriate package.
 
-## Quicklinks
+## Scope
 
+<<<<<<< HEAD
+- `lp-messaging-sdk-flutter`: Flutter plugin that wraps LivePerson native SDKs
+- `lp-messaging-sdk-dart`: Pure Dart engine that talks to LivePerson APIs
+=======
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [What We Are Looking For](#what-we-are-looking-for)
 - [How to Contribute](#how-to-contribute)
@@ -16,87 +22,56 @@ Thank you for considering contributing to the FirebaseDart Authentication SDK, a
 - [SDKs and Liveperson Integration](#sdks-and-liveperson-integration)
 - [Available Versions](#available-versions)
 - [Community](#community)
+>>>>>>> main
 
-## Code of Conduct
+## How to contribute
 
-By participating and contributing to LivePerson Flutter SDK, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
+1. Open an issue describing the bug, feature, or documentation gap.
+2. Keep changes small and focused; include tests when behavior changes.
+3. Update documentation if you add or modify public APIs.
 
-## What We Are Looking For
+## Development setup
 
-We welcome contributions in various forms, such as:
+1. Fork and clone the repo.
+2. Install the Dart and Flutter SDKs as needed.
+3. Work within the specific package directory.
 
-- Bug reports and fixes
-- Feature requests and implementations
-- Documentation improvements
-- Feedback on the SDK's performance and design
+## Testing
 
-## How to Contribute
+From the package you changed:
 
-Due to the significant time required to review pull requests, we generally only accept and review pull requests from our internal community and network. However, we welcome bug reports and documentation contributions from everyone.
+```bash
+dart test
+```
 
-If you wish to join our community or officially contribute to the repository, please join our Discord community or subscribe to our mailing list.
+If you edit the Flutter plugin, also run:
 
-### Submitting a Bug Report
-1. Check Existing Issues: Before submitting a new bug report, please check if the issue already exists in our GitHub Issues.
+```bash
+flutter test
+```
 
-2. Create a New Issue: If the bug is not listed, create a new issue. Provide a detailed description, steps to reproduce, and any relevant screenshots or logs.
+## Pull requests
 
-### Submitting a Documentation Report
+Please include:
 
-1. Check Existing Documentation: Ensure the documentation report or suggestion is not already covered.
+- A clear description of the change and why it’s needed
+- Any relevant issue links
+- Notes on testing and environment
 
-2. Create a New Issue: Open a new issue and select the "Documentation" template. Clearly describe the documentation improvement or error.
+## Reporting bugs
 
-## Getting Started
+When filing an issue, include:
 
-Set up your environment by:
-
-1. Forking and cloning the project repository.
-2. Installing Dart and any required dependencies.
-3. Following the setup instructions to prepare your development environment.
-
-## Pull Request Guidelines
-
-Ensure your pull request adheres to the following:
-
-1. Aligns with the project's code style and best practices.
-2. Passes all existing tests and any new tests related to your changes.
-3. Updates or adds documentation as needed.
-4. Describes the changes made and the reasoning behind them.
-
-## Reporting Bugs
-
-When reporting bugs, include:
-
-- Clear and descriptive title.
-- Step-by-step reproduction instructions.
-- Expected and actual behavior.
-- Environment details (OS, Dart version, etc.).
-
-## Feature Requests
-
-We encourage feature requests that enhance the SDK. Please:
-
-- Feature Request and enhcancements can be submitted through the Freshdesk subscription console.
-- Explain how it aligns with the SDK's goals.
-- Discuss potential implementation and impact.
-
-## Improving Documentation
-
-Your contributions to improve or clarify documentation are always welcome. Whether it's typo corrections, additional examples, or clearer explanations, your help is invaluable.
-
-## Available Versions
-
-1. **Main - Stable Version**: Usually one release a month.  This version attempts to keep stability without introducing breaking changes.
-2. **Sample Apps - FrontEnd Version**: The sample apps are provided in various frontend languages in order to allow maximum flexibility with your frontend implementation with the Dart backend.  Note that new features are first tested in the sample apps before being released in the mainline branch. Use only as a guide for your frontend/backend implementation of Dart.
-
-## Community
-
-Join the discussion on issues, contribute to pull requests, or reach out through our [Join our Discord channel](https://discord.gg/tcSdBSzT) for more informal discussions. Your input is crucial to the project's success.
-
+- Steps to reproduce
+- Expected vs actual behavior
+- Environment details (OS, Dart/Flutter versions)
 
 ## Licensing
 
+<<<<<<< HEAD
+By contributing, you agree that your contributions will be licensed under the
+project’s existing license terms. See `LICENSE`.
+=======
 All LivePerson Flutter SDK packages are licensed under BSD-3, except for the *services packages*, which uses the ELv2 license, and are licensed from third party software Liveperson Inc. In short, this means that you can, without limitation, use any of the client packages in your app as long as you do not offer the SDK's or services as a cloud service to 3rd parties (this is typically only relevant for cloud service providers).  See the [LICENSE](LICENSE.md) file for more details.
 
 ## Acknowledgments
@@ -105,3 +80,4 @@ All LivePerson Flutter SDK packages are licensed under BSD-3, except for the *se
 - Thanks to the Dart community for continuous support and inspiration.
 
 We would like to extend our gratitude to all the developers and contributors who have made this Firebase Dart SDK possible and continue to support its growth.
+>>>>>>> main
