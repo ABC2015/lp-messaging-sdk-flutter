@@ -20,8 +20,10 @@ class _LpExampleAppState extends State<LpExampleApp> {
   final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
   bool _initialized = false;
   String _status = 'Not initialized';
-  String _accountId = 'YOUR_ACCOUNT_ID';
-  String _appId = 'com.yourcompany.yourapp';
+  static const String _defaultAccountId = 'YOUR_ACCOUNT_ID';
+  static const String _defaultAppId = 'com.yourcompany.yourapp';
+  String _accountId = _defaultAccountId;
+  String _appId = _defaultAppId;
   String _jwt = '';
   String _authCode = '';
   String _pushToken = '';
@@ -137,7 +139,7 @@ class _LpExampleAppState extends State<LpExampleApp> {
                 runSpacing: 8,
                 children: [
                   ElevatedButton(
-                    onPressed: _initialized || !_hasValidAuthInput()
+                    onPressed: _initialized || !_hasValidInitInput()
                         ? null
                         : _initSdk,
                     child: const Text('Initialize SDK'),
@@ -384,6 +386,15 @@ class _LpExampleAppState extends State<LpExampleApp> {
         if (_authCode.isEmpty) return null;
         return LpAuthConfig(authType: _authType, authCode: _authCode);
     }
+  }
+
+  bool _hasValidInitInput() {
+    final accountId = _accountId.trim();
+    final appId = _appId.trim();
+    return accountId.isNotEmpty &&
+        appId.isNotEmpty &&
+        accountId != _defaultAccountId &&
+        appId != _defaultAppId;
   }
 
   bool _hasValidAuthInput() {

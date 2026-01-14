@@ -71,12 +71,12 @@ release:
         git config --global user.email "${_GIT_USER}"
         git config --global user.name "${_GIT_USER}"
 
-        git remote set-url origin https://${GITLAB_USERNAME}:${GITLAB_TOKEN}@gitlab.com/dartapps/apps/intellitoggle/openfeature-provider-intellitoggle.git
+        git remote set-url origin https://${GITLAB_USERNAME}:${GITLAB_TOKEN}@gitlab.com/dartapps/apps/liveperson-flutter-sdk.git
         
         echo "Creating Git tag: v$VERSION"
-        git tag "v$VERSION"
+        git tag -f "v$VERSION"
         echo "Pushing Git tag v$VERSION to origin"
-        git push origin "v$VERSION"
+        git push --force origin "v$VERSION"
 
         RELEASE_NOTES=$(awk "/^## \[$VERSION\]/ {flag=1; next} /^## / {if(flag){exit}} flag" CHANGELOG.md)
         echo "Release notes extracted:"

@@ -75,7 +75,7 @@ In your Flutter app:
 ```yaml
 dependencies:
   lp_messaging_sdk_flutter:
-    version: 0.0.1-experimental.2
+    version: 0.0.1-experimental.3
 ```
 
 Then:
