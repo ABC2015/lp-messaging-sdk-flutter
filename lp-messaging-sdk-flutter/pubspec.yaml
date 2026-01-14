@@ -1,6 +1,6 @@
 name: lp_messaging_sdk_flutter
 description: Flutter plugin wrapping LivePerson native iOS/Android Messaging SDKs.
-version: 0.0.1-experimental.1
+version: 0.0.1-experimental.2
 homepage: https://github.com/LP-Messaging
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.1.4
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_test:

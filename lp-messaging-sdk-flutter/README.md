@@ -75,7 +75,7 @@ In your Flutter app:
 ```yaml
 dependencies:
   lp_messaging_sdk_flutter:
-    path: ../lp-messaging-sdk-flutter
+    version: 0.0.1-experimental.2
 ```
 
 Then:
