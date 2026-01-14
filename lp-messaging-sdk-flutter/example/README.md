@@ -1,16 +1,41 @@
-# lp_messaging_sdk_flutter_example
+# lp_messaging_sdk_flutter Example
 
-Demonstrates how to use the lp_messaging_sdk_flutter plugin.
+Example Flutter app that uses the `lp-messaging-sdk-flutter` plugin to
+initialize LivePerson and open the native conversation UI.
 
-## Getting Started
+Note: the plugin is marked experimental; APIs may change.
 
-This project is a starting point for a Flutter application.
+## Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK installed
+- LivePerson account ID
+- Android package name (app ID)
+- iOS bundle ID
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Configure
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Edit `lib/main.dart` and replace placeholders:
+
+- `accountId`: your LivePerson account/brand ID
+- `appId`: Android package name (e.g. `com.yourcompany.yourapp`)
+- Optional JWT: use a real token from your backend for authenticated sessions
+
+## Run
+
+From this directory:
+
+```bash
+flutter pub get
+flutter run
+```
+
+## What this example does
+
+- Initializes the LivePerson SDK
+- Optionally sets a user profile
+- Opens the native conversation screen
+
+## Notes
+
+- Configure Android/iOS permissions and push capabilities per LivePerson docs.
+- This example focuses on the core initialize + show conversation flow.
