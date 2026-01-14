@@ -44,7 +44,6 @@ lp-messaging-sdk-flutter/   # Flutter plugin (native iOS/Android bridge)
 lp-messaging-sdk-dart/      # Pure Dart engine (WebSocket + REST)
 tools/                      # Repo tooling
 ```
-
 ## Getting started
 
 ### Flutter plugin

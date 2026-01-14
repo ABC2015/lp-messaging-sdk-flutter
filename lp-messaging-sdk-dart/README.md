@@ -12,10 +12,12 @@ apps that need to talk to LivePerson messaging services directly.
 - Push registration API: register device tokens
 - File upload + structured content helpers
 - Offline queue persistence (in-memory or Hive)
+- Optional AI helpers (summaries, suggestions, moderation)
+- Mock backend for local tests and demos
 
 ## Requirements
 
-- Dart SDK: >=3.0.0 <4.0.0
+- Dart SDK: >=3.10.7 <4.0.0
 - Network access to LivePerson domains
 - A JWT generator on your backend (consumer or agent tokens)
 
@@ -49,6 +51,9 @@ High-level flow:
 4. `connect()` to open the WebSocket session.
 5. `startConversation()` and `sendText()`.
 6. Listen to `client.events` for messages, state, and errors.
+
+If you want a single facade object, use `LpClient`, which bundles consumer,
+agent, storage, and optional AI helpers.
 
 ## Quick start (consumer)
 
@@ -204,6 +209,17 @@ final agentApi = LpAgentApi(config: agentConfig, logger: LpLogger());
 await agentApi.accept(convId);
 await agentApi.markAsRead(convId, sequenceId);
 await agentApi.resolve(convId);
+```
+
+## LpClient facade (optional)
+
+```dart
+final client = LpClient(
+  config: config,
+  persistence: InMemoryPersistence(),
+);
+await client.init();
+await client.consumer.connect();
 ```
 
 ## Offline persistence
